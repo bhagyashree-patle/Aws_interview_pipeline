@@ -3,10 +3,16 @@ from datetime import datetime
 from datetime import date
 import csv
 
+a = input("Enter initial range of account no: ")
+b = input("Enter final range of account no. ")
+
+a1 = int(a)
+b1 = int(b)
+
 class BankDetails:
 
     def accountNo(self):
-        return random.randint(1**12, 10**12)
+        return random.randint(a1, b1)
 
     def random_date(self,date1,date2):
         """
@@ -45,7 +51,7 @@ class BankDetails:
         return age
 
 counter = 0
-while counter <= 1000000:
+while counter <= b1:
     bankdetails = BankDetails()
     customer_id = counter
     account_no = bankdetails.accountNo()
