@@ -21,6 +21,18 @@ class TransactionDetails:
         trans_details = random.choice(transaction_details)
         return trans_details
 
+    def random_date(self,date1,date2):
+        """
+        This function will return a random datetime between two datetime
+        objects.
+        """
+        d1 = datetime.strptime(date1, '%d/%m/%Y')
+        d2 = datetime.strptime(date2, '%d/%m/%Y')
+        year = random.randint(d1.year, d2.year)
+        month = random.randint(d1.month, d2.month)
+        day = random.randint(d1.day, d2.month)
+        create_date = datetime(year, month, day)
+        return create_date
     def randomTime(self):
         # generate random number scaled to number of seconds in a day
         # (24*60*60) = 86,400
@@ -66,7 +78,7 @@ class TransactionDetails:
         return [str(bal_amount),(outmessage)]
 
 counter = 0
-while counter <= 1000000:
+while counter <= 10:
     transactiondetails = TransactionDetails()
     transaction_id = transactiondetails.transId()
     cust_id = transactiondetails.custId()
@@ -76,6 +88,7 @@ while counter <= 1000000:
     trans_amount = transactiondetails.getTransAmount()
     # bal_amount = transactiondetails.getBalAmount(trans_amount,trans_type)
     # print("Balance amount is:" ,bal_amount)
+    tran_create_date = transactiondetails.random_date('01/01/2000', '31/12/2022')
     created_time = transactiondetails.randomTime()
     message = transactiondetails.getMessage(trans_amount, open_bal,trans_type)
     # print(message)
@@ -86,10 +99,10 @@ while counter <= 1000000:
     # print(flat_list)
 
     transaction_details_list = [str(transaction_id),str(cust_id),trans_type,trans_details,str(trans_amount),
-                                str(open_bal),created_time]
+                                str(open_bal)]
     # print(transaction_details_list)
 
-    trans_details_final_list = transaction_details_list + flat_list
+    trans_details_final_list = transaction_details_list + flat_list + [tran_create_date.strftime("%m/%d/%Y") + ' ' + created_time]
     # print(trans_details_final_list)
 
     final_trans_details = ','.join(trans_details_final_list)
@@ -101,9 +114,10 @@ while counter <= 1000000:
     # Create DataFrame by assigning column names
    # df = pd.DataFrame(final_trans_details, columns=column_names)
 
-    with open('D:/AWS Interview preparation/transactiondetails1.csv','a') as file:
+    with open('transactiondetails.csv','a') as file:
          file.write(final_trans_details + '\n')
          file.close()
 
     counter += 1
+
 print("Data has been written successfully")
