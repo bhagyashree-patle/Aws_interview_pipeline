@@ -2,14 +2,11 @@ import random
 from datetime import datetime
 from datetime import date
 import pandas as pd
-
+import time
 class TransactionDetails:
 
     def custId(self):
         return random.randint(1, 100)
-
-    def transId(self):
-        return random.randint(1**4, 10**4)
 
     def getTransType(self):
         transaction_type = ["Credit", "Debit"]
@@ -21,7 +18,7 @@ class TransactionDetails:
         trans_details = random.choice(transaction_details)
         return trans_details
 
-    def random_date(self,date1,date2):
+    def random_date(self, date1, date2):
         """
         This function will return a random datetime between two datetime
         objects.
@@ -53,14 +50,9 @@ class TransactionDetails:
             final_bal = open_bal + trans_amount
         else:
             final_bal = open_bal - trans_amount
-        # print(open_bal, trans_amount, trans_type,final_bal)
         return final_bal
 
-        # return random.randint(10, 5000)
-
     def getMessage(self, trans_amount, open_bal, trans_type):
-        # balance = 0
-        # message = ["Transaction Successful", "Transaction failed"]
         if trans_type == 'Debit':
             if trans_amount <= open_bal:
                 bal_amount = transactiondetails.getBalAmount(trans_amount, trans_type)
@@ -78,46 +70,34 @@ class TransactionDetails:
         return [str(bal_amount),(outmessage)]
 
 counter = 0
-while counter <= 10:
+timestr = time.strftime("%Y-%m-%d-%H-%M-%S")
+while counter <= 100:
     transactiondetails = TransactionDetails()
-    transaction_id = transactiondetails.transId()
+    transaction_id = counter
     cust_id = transactiondetails.custId()
     trans_type = transactiondetails.getTransType()
     trans_details = transactiondetails.getTransDetails()
     open_bal = random.randint(1000, 50000)
     trans_amount = transactiondetails.getTransAmount()
-    # bal_amount = transactiondetails.getBalAmount(trans_amount,trans_type)
-    # print("Balance amount is:" ,bal_amount)
     tran_create_date = transactiondetails.random_date('01/01/2000', '31/12/2022')
     created_time = transactiondetails.randomTime()
-    message = transactiondetails.getMessage(trans_amount, open_bal,trans_type)
-    # print(message)
-    # balance = transactiondetails.getMessage(trans_amount, open_bal,trans_type)
+    message = transactiondetails.getMessage(trans_amount, open_bal, trans_type)
     flat_list = []
     for element in message:
         flat_list.append(element)
-    # print(flat_list)
 
-    transaction_details_list = [str(transaction_id),str(cust_id),trans_type,trans_details,str(trans_amount),
-                                str(open_bal)]
-    # print(transaction_details_list)
-
+    transaction_details_list = [str(transaction_id), str(cust_id), trans_type, trans_details, str(trans_amount),str(open_bal)]
     trans_details_final_list = transaction_details_list + flat_list + [tran_create_date.strftime("%m/%d/%Y") + ' ' + created_time]
-    # print(trans_details_final_list)
-
     final_trans_details = ','.join(trans_details_final_list)
-    #print(final_trans_details)
-    # Column names to be added
-    #column_names = ['transaction id', 'customerid', 'transaction_type','trans_details','trans_amount', 'open_bal' ,
-    #                'created_time', 'available balance', 'message']
-
-    # Create DataFrame by assigning column names
-   # df = pd.DataFrame(final_trans_details, columns=column_names)
-
-    with open('transactiondetails.csv','a') as file:
+    filename = 'transaction'+ timestr +'.csv'
+    with open(filename,'a') as file:
          file.write(final_trans_details + '\n')
          file.close()
 
     counter += 1
 
 print("Data has been written successfully")
+with open(filename, 'r') as f:
+     last_line = f.readlines()[-1].split(",")
+     last_counter = int(last_line[0])
+print(last_counter)
