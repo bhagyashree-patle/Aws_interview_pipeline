@@ -1,0 +1,7 @@
+aws configure set aws_access_key_id AKIAWFNIFM2OPSRVIERZ
+aws configure set aws_secret_access_key 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
+aws s3 ls
+cd ../..
+aws s3api create-bucket     --bucket raw-bucket-interviewpipeline1     --region ap-south-1 --create-bucket-configuration LocationConstraint=ap-south-1
+aws s3 cp D:/AWS Interview preparation/transactiondetails1.csv s3://raw-bucket-interviewpipeline1
+aws s3 ls s3://raw-bucket-interviewpipeline1 --recursive
